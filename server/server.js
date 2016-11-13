@@ -7,6 +7,20 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+/*
+
+We are going to build an API that will:
+
+* Handle CRUD for an item (we’re going to use lions)
+
+* Have a standard URL (http://example.com:8080/lions and http://example.com:8080/lions/:id)
+
+* Use the proper HTTP verbs to make it RESTful (GET, POST, PUT, and DELETE)
+
+* Return JSON data.
+
+*/
+
 var lions = [];
 var id = 0;
 
@@ -43,6 +57,19 @@ app.put('/lions/:id', function(req, res) {
     var updatedLion = _.assign(lions[lion], update);
     res.json(updatedLion);
   }
+});
+
+app.delete('/lions', function(req, res) {
+  var id = req.body.id;
+  if (!id || !lions[id]) { res.send({
+    success: false,
+    error: "No such lion with id."
+  }) };
+
+  lions[id] = null;
+  delete lions[id];
+
+  res.send({success: true});
 });
 
 app.set('port', (process.env.PORT || 8080));
