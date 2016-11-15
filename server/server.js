@@ -61,13 +61,15 @@ app.put('/lions/:id', function(req, res) {
 
 app.delete('/lions', function(req, res) {
   var id = req.body.id;
-  if (!id || !lions[id]) { res.send({
-    success: false,
-    error: "No such lion with id."
-  }) };
+  if (!id || !lions[id]) {
+    res.send({
+      success: false,
+      error: "No such lion with id."
+    })
+    return;
+  };
 
-  lions[id] = null;
-  delete lions[id];
+  lions = _.without(lions, lions[id]);
 
   res.send({success: true});
 });
